@@ -42,16 +42,23 @@
           <li><a class="nav-link scrollto active" href="/">Home</a></li>
           <li><a class="nav-link scrollto"  href="/blog">Blog</a></li>
           <li><a class="nav-link scrollto" href="/about">About</a></li>
-          <li><a class="nav-link scrollto" href="/orders">Orders</a></li>
-          <li><a class="nav-link scrollto" href="/profile">Profile</a></li>
+          <li><a class="nav-link scrollto" href="/checkout">Checkout</a></li>
+          <li><a class="nav-link scrollto" href="/about">My Profile</a></li>
+          
+          <button type="button" class="btn btn-lg btn-danger p-2 m-2" data-toggle="popover" data-placement="bottom" id="popcart" data-html=" True" > Cart(<span id="cart">0</span>)</button>
+          {% if request.user.is_authenticated %}
+          <li><a href="/auth/logout">LogOut</a></li> 
+          {% else %}
           <li class="dropdown"><a href="#"><span>SignIn</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a href="/auth/signup">Sign Up</a></li> 
-              <li><a href="/auth/login">Login</a></li> 
-              <li><a href="/auth/logout">LogOut</a></li> 
+              <li><a href="/auth/signup">Sign Up</a></li>
+              <li><a href="/auth/login">Login</a></li>          
             </ul>
           </li>
-          <li><a class="nav-link scrollto bg-danger p-3 m-2" href="#contact">Cart</a></li>
+          {% endif %}
+          
+          
+          
           <li><a class="nav-link scrollto bg-dark p-3 m-2" href="/contact">Contact</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>

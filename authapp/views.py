@@ -10,6 +10,7 @@ from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
 from django.core.mail import EmailMessage
 from django.views.generic import View
+from django.contrib.auth import authenticate,login,logout
 
 def signup(request):
     if request.method == "POST":
@@ -21,14 +22,14 @@ def signup(request):
             return render(request,'signup.html')
         try:
             if User.objects.get(username=email):
-                # return HttpResponse("Email already exists")
                 messages.info(request,"Email already exists")
                 return render(request,"signup.html")
         except Exception as identifier: 
             pass
 
         user=User.objects.create_user(email,email,password)
-        user.is_active=False
+        user.is_active=True
+        # As email authentication is not working I made user active to true.
         user.save()
         email_subject = "Activate your account"
         message=render_to_string('activate.html',{
@@ -57,8 +58,22 @@ class ActivateAccountView(View):
             messages.info(request,"Account activated successfully")
             return redirect(request,'activatefail.html')
 
-def login(request):
+def handlelogin(request):
+    if request.method == "POST":
+        username = request.POST['email']
+        userpassword = request.POST['pass1']
+        myuser = authenticate(username = username,userpassword = userpassword)
+        print(username,userpassword)
+        if myuser is not None:
+            login(request,myuser)
+            messages.success(request,"Login Success")
+            return redirect('/')
+        else:
+            messages.error(request,"Invalid Credentials")
+            return redirect('/auth/login')
     return render(request,"login.html")
 
-def logout(request):
+def handlelogout(request):
+    logout(request)
+    messages.info(request,"Logout Success")
     return redirect('/auth/login')
